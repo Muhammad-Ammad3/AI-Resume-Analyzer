@@ -1,52 +1,3 @@
-// import React, { useState } from 'react';
-// import Header from './components/Header';
-// import ResumeUpload from './components/ResumeUpload';
-// import JobDescriptionUpload from './components/JobDescriptionUpload';
-// import AnalysisResults from './components/AnalysisResults';
-// import Chatbot from './components/Chatbot';
-// import { AnalysisProvider } from './context/AnalysisContext';
-
-// function App() {
-//   const [step, setStep] = useState(1);
-
-//   return (
-//     <AnalysisProvider>
-//       <div className="min-h-screen bg-linear-to-br from-slate-50 via-blue-50 to-indigo-100">
-
-//         <Header />
-
-//         <main className="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
-
-//           <div className="text-center mb-16">
-//             <h1 className="text-5xl font-bold bg-linear-to-r from-primary-600 to-indigo-600 bg-clip-text text-transparent mb-6">
-//               AI Resume Analyzer
-//             </h1>
-
-//             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-//               Upload your resume and job description to get AI-powered insights, keyword matching, and personalized improvement suggestions.
-//             </p>
-//           </div>
-
-//           <div className="grid lg:grid-cols-2 gap-12 items-start">
-
-//             {/* LEFT SIDE */}
-//             <div className="space-y-8">
-//               {step === 1 && <ResumeUpload setStep={setStep} />}
-//               {step === 2 && <JobDescriptionUpload setStep={setStep} />}
-//               {step === 3 && <AnalysisResults />}
-//             </div>
-
-//             {/* RIGHT SIDE */}
-//             <Chatbot />
-
-//           </div>
-//         </main>
-//       </div>
-//     </AnalysisProvider>
-//   );
-// }
-
-// export default App;
 import React, { useEffect, useState } from "react";
 import Header from "./components/Header";
 import ResumeUpload from "./components/ResumeUpload";
@@ -59,22 +10,20 @@ const AppContent = () => {
   const [step, setStep] = useState(1);
   const { dispatch } = useAnalysis();
 
-  // 1. FIX: Pehli baar load hone par state reset
   useEffect(() => {
     dispatch({ type: "RESET_ALL" });
   }, [dispatch]);
 
-  // 2. NEW: Jab bhi Step change ho (khass kar Step 3 par), page upar jaye
-  useEffect(() => {
+useEffect(() => {
+  if (step === 3) {
     window.scrollTo({
       top: 0,
-      behavior: "smooth", // Smoothly upar jayega
+      behavior: "smooth",
     });
-  }, [step]); // Jab bhi 'step' ki value badlegi, ye chalega
-
+  }
+}, [step]);
   return (
     <div className="min-h-screen bg-[#F8FAFC] text-slate-900 relative selection:bg-indigo-100 selection:text-indigo-700 overflow-x-hidden">
-      {/* 🌌 BACKGROUND GRADIENTS */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-[-5%] right-[-10%] w-80 h-80 md:w-160 md:h-160 bg-indigo-50 rounded-full blur-[80px] md:blur-[120px] opacity-60"></div>
         <div className="absolute bottom-[-5%] left-[-10%] w-70 h-70 md:w-140 md:h-140 bg-emerald-50 rounded-full blur-[70px] md:blur-[100px] opacity-60"></div>
@@ -83,7 +32,6 @@ const AppContent = () => {
       <Header />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8 md:py-12 lg:py-20 relative z-10">
-        {/* 🏆 HERO SECTION (Step 1 & 2 ke liye) */}
         {step < 3 && (
           <div className="text-center mb-12 md:mb-24">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-slate-200 rounded-2xl shadow-sm mb-6 md:mb-8 animate-in fade-in slide-in-from-bottom-3 duration-700">
@@ -92,13 +40,13 @@ const AppContent = () => {
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
               </span>
               <span className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.15em] text-slate-500">
-                Powered by Gemini 1.5 Flash
+                Powered by Open Router AI.
               </span>
             </div>
 
             <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-black text-slate-900 mb-4 md:mb-6 tracking-tight leading-[1.1] px-2">
               Optimize Your{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600">
+              <span className="text-transparent bg-clip-text bg-linear-to-r from-indigo-600 to-violet-600">
                 Career
               </span>{" "}
               <br className="hidden sm:block" />
@@ -136,23 +84,20 @@ const AppContent = () => {
           </div>
         )}
 
-        {/* 🎛 MAIN CONTENT AREA */}
         <div
-          className={`grid ${step === 3 ? "lg:grid-cols-12" : "max-w-2xl mx-auto"} gap-8 lg:gap-12 items-start min-h-[400px]`}
+          className={`grid ${step === 3 ? "lg:grid-cols-12" : "max-w-2xl mx-auto"} gap-8 lg:gap-12 items-start min-h-100`}
         >
-          {/* LEFT SIDE: RESULTS (Step 3 par Mobile par upar) */}
           <div
             className={`${step === 3 ? "lg:col-span-7 order-1" : "w-full"} space-y-6 md:space-y-8`}
           >
-            <div className="bg-white rounded-[2rem] md:rounded-[2.5rem] p-1.5 md:p-2 shadow-xl border border-slate-100 overflow-hidden transition-all duration-500">
-              <div className="bg-slate-50/50 rounded-[1.8rem] md:rounded-4xl overflow-hidden min-h-[350px] md:min-h-[450px]">
+            <div className="bg-white rounded-4xl md:rounded-[2.5rem] p-1.5 md:p-2 shadow-xl border border-slate-100 overflow-hidden transition-all duration-500">
+              <div className="bg-slate-50/50 rounded-[1.8rem] md:rounded-4xl overflow-hidden min-h-87 md:min-h-112">
                 {step === 1 && <ResumeUpload setStep={setStep} />}
                 {step === 2 && <JobDescriptionUpload setStep={setStep} />}
                 {step === 3 && <AnalysisResults setStep={setStep} />}
               </div>
             </div>
 
-            {/* PERKS (Only on Step 1 & 2) */}
             {step < 3 && (
               <div className="grid grid-cols-2 gap-3 md:gap-4">
                 <div className="p-4 md:p-6 bg-white rounded-3xl md:rounded-4xl border border-slate-100 shadow-sm text-center">
@@ -175,10 +120,9 @@ const AppContent = () => {
             )}
           </div>
 
-          {/* RIGHT SIDE: CHATBOT (Step 3 par Mobile par neeche) */}
           {step === 3 && (
             <div className="lg:col-span-5 order-2 space-y-6 animate-in fade-in slide-in-from-bottom-4 lg:slide-in-from-right-4 duration-700">
-              <div className="bg-white rounded-[2rem] md:rounded-[2.5rem] p-2 md:p-3 shadow-xl border border-slate-100 h-[550px] md:h-162 flex flex-col">
+              <div className="bg-white rounded-4xl md:rounded-[2.5rem] p-2 md:p-3 shadow-xl border border-slate-100 h-137 md:h-162 flex flex-col">
                 <div className="flex items-center gap-3 p-4 border-b border-slate-50">
                   <div className="w-8 h-8 bg-indigo-600 rounded-xl flex items-center justify-center text-white shrink-0">
                     <SparklesIcon className="w-4 h-4" />

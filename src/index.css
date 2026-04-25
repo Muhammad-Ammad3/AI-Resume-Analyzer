@@ -1,1 +1,18 @@
 @import "tailwindcss";
+
+/* Custom Scrollbar for the whole App */
+@layer base {
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #f8fafc; /* Very light gray */
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #6366f1; /* Indigo matching your logo */
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #4f46e5;
+  }
+}

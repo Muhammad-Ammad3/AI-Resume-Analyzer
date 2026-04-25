@@ -1,169 +1,3 @@
-// import React, { useCallback, useState } from 'react';
-// import { useDropzone } from 'react-dropzone';
-// import { useAnalysis } from '../context/AnalysisContext';
-// import mammoth from 'mammoth/mammoth.browser';
-// import { DocumentPlusIcon, DocumentTextIcon } from '@heroicons/react/24/outline';
-// import * as pdfjsLib from "pdfjs-dist";
-
-// pdfjsLib.GlobalWorkerOptions.workerSrc =
-//   `//unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
-
-// // ✅ PDF Extractor (FIXED)
-// const extractPDFText = async (file) => {
-//   const arrayBuffer = await file.arrayBuffer();
-//   const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-
-//   let text = "";
-
-//   for (let i = 1; i <= pdf.numPages; i++) {
-//     const page = await pdf.getPage(i);
-//     const content = await page.getTextContent();
-//     const strings = content.items.map(item => item.str);
-//     text += strings.join(" ") + "\n";
-//   }
-
-//   return text;
-// };
-
-// const ResumeUpload = ({ setStep }) => {
-//   const { dispatch } = useAnalysis();
-//   const [error, setError] = useState('');
-
-//   const extractEmail = (text) => {
-//     const match = text.match(/[\w.-]+@[\w.-]+\.\w+/g);
-//     return match ? match[0] : 'N/A';
-//   };
-
-//   const extractPhone = (text) => {
-//     const match = text.match(/(\+?\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}/);
-//     return match ? match[0] : 'N/A';
-//   };
-
-//   const extractSkills = (text) => {
-//     const match = text.match(/(skills|technologies|tools):?\s*([^\n\r]+)/i);
-//     return match
-//       ? match[2].split(/[,|]/).map(s => s.trim()).filter(Boolean)
-//       : [];
-//   };
-
-//   const parseResumeText = (text) => {
-//     const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
-
-//     return {
-//       rawText: text,
-//       name: lines[0] || 'User',
-//       email: extractEmail(text),
-//       phone: extractPhone(text),
-//       skills: extractSkills(text),
-//     };
-//   };
-
-//   const parseResume = async (file) => {
-//     const type = file.name.split('.').pop().toLowerCase();
-
-//     try {
-//       let text = '';
-
-//       // DOCX
-//       if (type === 'docx') {
-//         const buffer = await file.arrayBuffer();
-//         const result = await mammoth.extractRawText({ arrayBuffer: buffer });
-//         text = result.value;
-//       }
-
-//       // PDF
-//       else if (type === 'pdf') {
-//         text = await extractPDFText(file);
-//       }
-
-//       else {
-//         throw new Error('Only PDF or DOCX allowed');
-//       }
-
-//       const resumeData = parseResumeText(text);
-
-//       dispatch({
-//         type: 'SET_RESUME',
-//         payload: resumeData
-//       });
-
-//       setStep(2);
-
-//     } catch (err) {
-//       setError('Error: ' + err.message);
-//     }
-//   };
-
-//   const onDrop = useCallback((files) => {
-//     if (files[0]) {
-//       setError('');
-//       parseResume(files[0]);
-//     }
-//   }, []);
-
-//   const { getRootProps, getInputProps, isDragActive } = useDropzone({
-//     onDrop,
-//     accept: {
-//       'application/pdf': ['.pdf'],
-//       'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx']
-//     },
-//     maxFiles: 1
-//   });
-
-//   return (
-//     <div className="card lg:max-w-lg bg-white p-8 rounded-3xl shadow-xl">
-
-//       {/* HEADER */}
-//       <div className="text-center mb-8">
-
-//         <div className="w-20 h-20 bg-linear-to-r from-blue-500 to-indigo-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
-//           <DocumentPlusIcon className="w-10 h-10 text-white" />
-//         </div>
-
-//         <h2 className="text-3xl font-bold text-gray-900 mb-2">
-//           Step 1: Upload Resume
-//         </h2>
-
-//         <p className="text-gray-600 font-medium">
-//           PDF or DOCX files only
-//         </p>
-//       </div>
-
-//       {/* DROPZONE */}
-//       <div
-//         {...getRootProps()}
-//         className={`border-2 border-dashed rounded-2xl p-12 text-center transition-all cursor-pointer group ${
-//           isDragActive
-//             ? 'border-blue-400 bg-blue-50'
-//             : 'border-gray-300 hover:border-blue-400 hover:bg-blue-50'
-//         }`}
-//       >
-//         <input {...getInputProps()} />
-
-//         <DocumentTextIcon
-//           className={`w-16 h-16 mx-auto mb-4 transition-colors ${
-//             isDragActive ? 'text-blue-500' : 'text-gray-400 group-hover:text-blue-400'
-//           }`}
-//         />
-
-//         <p className="text-xl font-semibold text-gray-700">
-//           {isDragActive ? 'Drop it now!' : 'Drag & drop or Click to upload'}
-//         </p>
-//       </div>
-
-//       {/* ERROR */}
-//       {error && (
-//         <div className="mt-6 p-4 bg-red-50 border-l-4 border-red-500 rounded-lg text-red-800 text-sm">
-//           {error}
-//         </div>
-//       )}
-
-//     </div>
-//   );
-// };
-
-// export default ResumeUpload;
-
 import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { useAnalysis } from "../context/AnalysisContext";
@@ -178,15 +12,12 @@ import {
 } from "@heroicons/react/24/outline";
 import * as pdfjsLib from "pdfjs-dist";
 
-// Worker initialization
 pdfjsLib.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
 
 const ResumeUpload = ({ setStep }) => {
   const { dispatch } = useAnalysis();
   const [error, setError] = useState("");
   const [fileStatus, setFileStatus] = useState("idle"); // idle, loading, success, error
-
-  // --- HELPER FUNCTIONS (Inside Component for clear scope) ---
 
   const extractPDFText = async (file) => {
     const arrayBuffer = await file.arrayBuffer();
@@ -252,7 +83,6 @@ const ResumeUpload = ({ setStep }) => {
         const result = await mammoth.extractRawText({ arrayBuffer: buffer });
         text = result.value;
       } else if (type === "pdf") {
-        // Calling the local function
         text = await extractPDFText(file);
       } else {
         throw new Error("Only PDF or DOCX files are supported");
@@ -266,7 +96,6 @@ const ResumeUpload = ({ setStep }) => {
       dispatch({ type: "SET_RESUME", payload: resumeData });
       setFileStatus("success");
 
-      // Smooth transition to next step
       setTimeout(() => setStep(2), 1500);
     } catch (err) {
       console.error("Parsing Error:", err);
@@ -276,8 +105,6 @@ const ResumeUpload = ({ setStep }) => {
       setFileStatus("error");
     }
   };
-
-  // --- DROPZONE SETUP ---
 
   const onDrop = useCallback((files) => {
     if (files[0]) {
@@ -310,7 +137,7 @@ const ResumeUpload = ({ setStep }) => {
       {/* DROPZONE AREA */}
       <div
         {...getRootProps()}
-        className={`relative group cursor-pointer border-2 border-dashed rounded-[2rem] p-10 lg:p-16 transition-all duration-300 flex flex-col items-center text-center ${
+        className={`relative group cursor-pointer border-2 border-dashed rounded-4xl p-10 lg:p-16 transition-all duration-300 flex flex-col items-center text-center ${
           isDragActive
             ? "border-indigo-500 bg-indigo-50/50 scale-[1.02]"
             : fileStatus === "success"
